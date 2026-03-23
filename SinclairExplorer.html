@@ -502,6 +502,8 @@ const RAW_DATA = [
 
 
 
+
+
 // ─────────────────────────────────────────────
 //  STATE
 // ─────────────────────────────────────────────
@@ -519,20 +521,26 @@ let sortDir = 'asc';
 // ─────────────────────────────────────────────
 function buildPrograms() {
   const saved = loadInterest();
-  programs = RAW_DATA.map(r => ({
-    letter:       r[0],
-    title:        r[1],
-    type:         r[2],
-    interest:     saved[r[1]] || r[3] || 'None',
-    verified:     r[4] || 'No',
-    year:         r[5] || '',
-    salary:       r[6] || 0,
-    hourly:       r[7] || 0,
-    jobs:         r[8] || 0,
-    growth:       r[9] || 0,
-    outlookChg:   r[10] || 0,
-    satisfaction: r[11] || 0,
-  }));
+  programs = RAW_DATA.map(r => {
+    let interest = saved[r[1]] || r[3] || 'None';
+    // Strict validation to prevent crashes if data is malformed
+    if (!['High', 'Medium', 'Low', 'None'].includes(interest)) interest = 'None';
+    
+    return {
+      letter:       r[0],
+      title:        r[1],
+      type:         r[2],
+      interest:     interest,
+      verified:     r[4] || 'No',
+      year:         r[5] || '',
+      salary:       r[6] || 0,
+      hourly:       r[7] || 0,
+      jobs:         r[8] || 0,
+      growth:       r[9] || 0,
+      outlookChg:   r[10] || 0,
+      satisfaction: r[11] || 0,
+    };
+  });
 }
 
 // ─────────────────────────────────────────────
@@ -860,10 +868,23 @@ window.addEventListener('resize', renderChart);
 // ─────────────────────────────────────────────
 //  START
 // ─────────────────────────────────────────────
-buildPrograms();
-updateStats();
-renderAccordion();
-renderChart();
+(function init() {
+  try {
+    buildPrograms();
+    updateStats();
+    renderChart();
+    
+    // Defer heavy DOM updates (Accordion) slightly to ensure responsiveness
+    setTimeout(() => {
+        renderAccordion();
+        document.getElementById('prog-count-badge').textContent = programs.length + ' programs';
+    }, 10);
+  } catch (err) {
+    document.getElementById('prog-count-badge').textContent = 'Error loading data';
+    console.error('Initialization failed:', err);
+    alert('Failed to load program data. Please refresh.');
+  }
+})();
 </script>
 </body>
 </html>
