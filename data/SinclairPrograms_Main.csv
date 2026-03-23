@@ -1,5 +1,5 @@
 AlphabeticalLetter,Title,ProgramType,StudentInterestLevel,IsDataVerified,BLSDataYear,MedianSalary,MedianPayPerHour,CurrentNumberJobs,JobOutlookGrowthPercent,JobOutlookChanges,JobSatisfaction
-A,Accounting,Career (C),None,No,2023,77250,0,1579800,72800,0,62
+A,Accounting,Career (C),None,Yes,2024,81680,39.27,1579800,5,72800,0
 A,Addiction Services,Career (C),None,No,2023,49330,0,342940,18,0,71
 A,Agricultural Sciences,Career (C),None,No,2023,55380,0,39540,6,0,68
 A,Applied Psychology,Career (C),None,No,2023,0,0,0,0,0,0

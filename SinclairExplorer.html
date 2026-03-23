@@ -388,7 +388,7 @@
 //   11: JobSatisfaction
 // ─────────────────────────────────────────────
 const RAW_DATA = [
-  ["A","Accounting","Career (C)","None","No","2023",77250,0,1579800,72800,0,62],
+  ["A","Accounting","Career (C)","None","Yes","2024",81680,39.27,1579800,5,72800,0],
   ["A","Addiction Services","Career (C)","None","No","2023",49330,0,342940,18,0,71],
   ["A","Agricultural Sciences","Career (C)","None","No","2023",55380,0,39540,6,0,68],
   ["A","Applied Psychology","Career (C)","None","No","2023",0,0,0,0,0,0],
@@ -495,6 +495,10 @@ const RAW_DATA = [
   ["V","Veterinary Technology","Career (C)","None","No","2023",0,0,0,0,0,0],
   ["V","Visual Communications","Career (C)","None","No","2023",0,0,0,0,0,0]
 ];
+
+
+
+
 
 
 
@@ -692,10 +696,21 @@ function bindTooltips(progs, datasets) {
       </div>`;
     });
     // Add extra details not on chart
-    if (p.hourly > 0) {
-      rows += `<div class="tooltip-row"><span style="color:var(--text-dim)">Hourly:</span> <strong>$${p.hourly}</strong></div>`;
-    }
-    rows += `<div style="margin-top:4px;color:var(--text-dim);font-size:9px">${p.type} ${p.year ? `(${p.year})` : ''}</div>`;
+    rows += `<div class="tooltip-row"><span style="color:var(--text-dim)">Hourly:</span> <strong>${p.hourly > 0 ? '$' + p.hourly : '—'}</strong></div>`;
+    
+    // Outlook Change: Show +/-, or — if 0
+    let outlook = '—';
+    if (p.outlookChg !== 0) outlook = (p.outlookChg >= 0 ? '+' : '') + p.outlookChg.toLocaleString();
+    rows += `<div class="tooltip-row"><span style="color:var(--text-dim)">Outlook Change:</span> <strong>${outlook}</strong></div>`;
+
+    // Satisfaction: Show %, or — if 0
+    rows += `<div class="tooltip-row"><span style="color:var(--text-dim)">Satisfaction:</span> <strong>${p.satisfaction > 0 ? p.satisfaction + '%' : '—'}</strong></div>`;
+    
+    let footer = p.type;
+    if (p.year) footer += ` • ${p.year}`;
+    if (p.verified === 'Yes') footer += ` • <span style="color:var(--high)">✓ Verified</span>`;
+    
+    rows += `<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);color:var(--text-dim);font-size:9px">${footer}</div>`;
     tooltip.innerHTML = rows;
 
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
