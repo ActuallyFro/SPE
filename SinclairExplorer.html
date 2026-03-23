@@ -213,6 +213,20 @@
   .tooltip-title { font-family: var(--font-display); font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
   .tooltip-row { display: flex; gap: 5px; align-items: center; }
   .tooltip-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  
+  /* Tooltip Status Footer */
+  .tooltip-footer {
+    display: block;
+    margin: 10px -14px -10px; /* Bleed to edges */
+    padding: 6px 14px;
+    font-size: 10px;
+    font-weight: 500;
+    border-top: 1px solid transparent;
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+  }
+  .tooltip-footer.verified { background: #dcfce7; color: #166534; border-top-color: #bbf7d0; }
+  .tooltip-footer.unverified { background: #f3f4f6; color: #6b7280; border-top-color: #e5e7eb; }
 
   /* ── ACCORDION ── */
   .accordion { display: flex; flex-direction: column; gap: 4px; }
@@ -246,6 +260,19 @@
   .prog-row:active { background: var(--surface); }
   .prog-name { color: var(--text); flex: 1; min-width: 0; font-size: 12px; }
   .prog-type { font-size: 9px; color: var(--text-dim); white-space: nowrap; flex-shrink: 0; }
+  .status-band {
+    width: 100%;
+    flex-basis: 100%; /* Ensure it wraps */
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-band.verified { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+  .status-band.unverified { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
   .interest-select {
     padding: 4px 8px;
     border-radius: var(--radius);
@@ -359,6 +386,8 @@
     <div class="accordion" id="accordion"></div>
     <div class="export-bar">
       <button class="primary" id="btn-export">⬇ Export CSV</button>
+      <input type="file" id="file-import" accept=".csv" style="display:none" onchange="importCSV(this)">
+      <button id="btn-import" onclick="document.getElementById('file-import').click()">⬆ Import CSV</button>
       <button id="btn-reset">Reset All to None</button>
       <span class="status-msg" id="status-msg"></span>
     </div>
@@ -714,11 +743,17 @@ function bindTooltips(progs, datasets) {
     // Satisfaction: Show %, or — if 0
     rows += `<div class="tooltip-row"><span style="color:var(--text-dim)">Satisfaction:</span> <strong>${p.satisfaction > 0 ? p.satisfaction + '%' : '—'}</strong></div>`;
     
-    let footer = p.type;
-    if (p.year) footer += ` • ${p.year}`;
-    if (p.verified === 'Yes') footer += ` • <span style="color:var(--high)">✓ Verified</span>`;
+    // Type + Year
+    rows += `<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);color:var(--text-dim);font-size:9px">${p.type}${p.year ? ' • '+p.year : ''}</div>`;
     
-    rows += `<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);color:var(--text-dim);font-size:9px">${footer}</div>`;
+    // Status Footer
+    const isVer = p.verified && p.verified.toLowerCase() === 'yes';
+    if (isVer) {
+      rows += `<div class="tooltip-footer verified">✓ Verified Data</div>`;
+    } else {
+      rows += `<div class="tooltip-footer unverified">Unverified Data</div>`;
+    }
+
     tooltip.innerHTML = rows;
 
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -754,6 +789,12 @@ function renderAccordion() {
       const opts = LEVELS.map(l =>
         `<option value="${l}"${p.interest === l ? ' selected' : ''}>${l}</option>`
       ).join('');
+      // Case-insensitive check for better user compatibility
+      const isVer = p.verified && p.verified.toLowerCase() === 'yes';
+      const status = isVer
+        ? `<div class="status-band verified"><span>✓ Verified Data</span></div>`
+        : `<div class="status-band unverified"><span>Unverified Data</span></div>`;
+
       return `<div class="prog-row">
         <span class="prog-name">${p.title}</span>
         <span class="prog-type">${p.type}</span>
@@ -762,6 +803,7 @@ function renderAccordion() {
           onchange="updateInterest(this)">
           ${opts}
         </select>
+        ${status}
       </div>`;
     }).join('');
 
@@ -837,6 +879,123 @@ function exportCSV() {
   const msg = document.getElementById('status-msg');
   msg.textContent = '✓ Exported! Open the CSV in Excel/Sheets to fill in BLS data.';
   setTimeout(() => msg.textContent = '', 6000);
+}
+
+// ─────────────────────────────────────────────
+//  IMPORT CSV
+// ─────────────────────────────────────────────
+function importCSV(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const text = e.target.result;
+    const lines = text.split(/\r?\n/);
+    if (!lines.length) return;
+
+    // Parse Header
+    const header = lines[0].toLowerCase().split(',');
+    
+    // Map column names to indices
+    const colMap = {};
+    header.forEach((h, i) => {
+      // Remove quotes and clean
+      const key = h.replace(/"/g, '').trim();
+      if (key.includes('title')) colMap.title = i;
+      else if (key.includes('interest')) colMap.interest = i;
+      else if (key.includes('verified')) colMap.verified = i;
+      else if (key.includes('year')) colMap.year = i;
+      else if (key.includes('salary') || key.includes('mediansalary')) colMap.salary = i;
+      else if (key.includes('hourly')) colMap.hourly = i;
+      else if (key.includes('jobs') || key.includes('currentnumberjobs')) colMap.jobs = i;
+      else if (key.includes('growth') || key.includes('joboutlookgrowthpercent')) colMap.growth = i;
+      else if (key.includes('changes') || key.includes('outlookchanges')) colMap.outlookChg = i;
+      else if (key.includes('satisfaction')) colMap.satisfaction = i;
+    });
+
+    if (colMap.title === undefined) {
+      alert('Invalid CSV: Could not find "Title" column.');
+      return;
+    }
+
+    let updatedCount = 0;
+    
+    // Helper: Parse CSV line respecting quotes
+    const parseLine = (line) => {
+      const res = [];
+      let entry = "";
+      let inQuotes = false;
+      for (let j = 0; j < line.length; j++) {
+        const c = line[j];
+        if (c === '"') {
+          if (j + 1 < line.length && line[j + 1] === '"') {
+            entry += '"'; // handle escaped quote
+            j++;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (c === ',' && !inQuotes) {
+          res.push(entry);
+          entry = "";
+        } else {
+          entry += c;
+        }
+      }
+      res.push(entry);
+      return res;
+    };
+
+    // Parse rows (start from 1)
+    for (let i = 1; i < lines.length; i++) {
+      if (!lines[i].trim()) continue;
+      
+      const row = parseLine(lines[i]);
+      const title = row[colMap.title];
+      if (!title) continue;
+
+      const p = programs.find(prog => prog.title === title);
+      
+      if (p) {
+        if (colMap.interest !== undefined) {
+           let val = row[colMap.interest];
+           if (['High', 'Medium', 'Low', 'None'].includes(val)) p.interest = val;
+        }
+        if (colMap.verified !== undefined) p.verified = row[colMap.verified];
+        if (colMap.year !== undefined) p.year = row[colMap.year];
+        
+        const num = (idx) => {
+            if (idx === undefined) return null;
+            let v = row[idx];
+            if (!v) return 0;
+            // Remove typical currency/percentage symbols
+            return parseFloat(v.replace(/[$,%]/g, '')) || 0;
+        };
+
+        if (colMap.salary !== undefined) p.salary = num(colMap.salary) || p.salary;
+        if (colMap.hourly !== undefined) p.hourly = num(colMap.hourly) || p.hourly;
+        if (colMap.jobs !== undefined) p.jobs = num(colMap.jobs) || p.jobs;
+        if (colMap.growth !== undefined) p.growth = num(colMap.growth) || p.growth;
+        if (colMap.outlookChg !== undefined) p.outlookChg = num(colMap.outlookChg) || p.outlookChg;
+        if (colMap.satisfaction !== undefined) p.satisfaction = num(colMap.satisfaction) || p.satisfaction;
+        
+        updatedCount++;
+      }
+    }
+
+    saveInterest();
+    renderAccordion();
+    updateStats();
+    renderChart();
+    
+    const msg = document.getElementById('status-msg');
+    msg.textContent = `✓ Imported ${updatedCount} programs.`;
+    setTimeout(() => msg.textContent = '', 6000);
+    
+    // Reset input so same file can be selected again
+    input.value = '';
+  };
+  reader.readAsText(file);
 }
 
 function resetInterest() {
