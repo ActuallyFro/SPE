@@ -271,7 +271,7 @@
     opacity: 0;
     transition: opacity 0.15s;
     z-index: 100;
-    max-width: 200px;
+    max-width: 240px; /* Wider for Degree titles */
     line-height: 1.8;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   }
@@ -571,7 +571,7 @@ const RAW_DATA = [
   ["B","Biology Education","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Low","","",0,0,0,0,"",""],
   ["B","Biomedical Engineering Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Low","","",0,0,0,0,"",""],
   ["B","Biotechnology","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
-  ["B","Building and Industrial Technology","Individualized (I)","None","No","2023",0,0,0,0,0,0,"Low","Industrial Designers","https://www.bls.gov/ooh/arts-and-design/industrial-designers.htm",0,0,0,0,"",""],
+  ["B","Building and Industrial Technology","Individualized (I)","None","Partially","2024",79450,38.2,30600,3,1000,0,"Low","Industrial Designers","https://www.bls.gov/ooh/arts-and-design/industrial-designers.htm",0,0,0,0,"","Bachelor's"],
   ["B","Business Administration","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["B","Business Information Systems","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["B","Business Management","Career (C)","None","No","2023",79050,0,2750000,5,0,67,"High","","",0,0,0,0,"",""],
@@ -580,21 +580,21 @@ const RAW_DATA = [
   ["B","Business Management/Supply Chain Management","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["B","Business Technology","Individualized (I)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["C","Civil Engineering Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium","","",0,0,0,0,"",""],
-  ["C","Communication Studies","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High","Public Relations Managers","https://www.bls.gov/ooh/management/public-relations-managers.htm",0,0,0,0,"",""],
-  ["C","Computer Aided Manufacturing/CNC Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium","Machinists And Tool And Die Makers","https://www.bls.gov/ooh/production/machinists-and-tool-and-die-makers.htm",0,0,0,0,"",""],
+  ["C","Communication Studies","University Parallel (P)","None","Partially","2024",132870,63.88,128900,5,6100,0,"High","Public Relations Managers","https://www.bls.gov/ooh/management/public-relations-managers.htm",0,0,0,0,"","Bachelor's"],
+  ["C","Computer Aided Manufacturing/CNC Technology","Career (C)","None","Partially","2024",57700,27.74,354800,-2,-5900,0,"Medium","Machinists And Tool And Die Makers","https://www.bls.gov/ooh/production/machinists-and-tool-and-die-makers.htm",0,0,0,0,"","Associate's"],
   ["C","Computer Information Systems/Network Engineering","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["C","Computer Information Systems/Secure System Administration","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["C","Computer Information Systems/Software Development","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["C","Computer Information Systems/User Support","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["C","Computer Information Systems/Web Development","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
-  ["C","Computer Science","University Parallel (P)","None","No","2023",136620,0,1850000,26,0,74,"High","Computer And Information Research Scientists","https://www.bls.gov/ooh/computer-and-information-technology/computer-and-information-research-scientists.htm",0,0,0,0,"",""],
+  ["C","Computer Science","University Parallel (P)","None","Yes","2024",131450,63.2,1895500,15,287900,0,"High","Software Developers","https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm",0,0,0,0,"","Bachelor's"],
   ["C","Construction Management Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium","","",0,0,0,0,"",""],
   ["C","Correctional Rehabilitation","Career (C)","None","No","2023",0,0,0,0,0,0,"Low","","",0,0,0,0,"",""],
   ["C","Creative Writing","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["C","Criminal Justice Science/Corrections","Career (C)","None","No","2023",0,0,0,0,0,0,"Low","","",0,0,0,0,"",""],
   ["C","Criminal Justice Science/Law Enforcement","Career (C)","None","No","2023",69160,0,686710,3,0,65,"Low","","",0,0,0,0,"",""],
   ["C","Culinary Entrepreneurship","Career (C)","None","No","2023",56520,0,150000,15,0,69,"Low","","",0,0,0,0,"",""],
-  ["C","Cyber Investigation Technology","Career (C)","None","No","2023",99860,0,168900,32,0,76,"High","Claims Adjusters Appraisers Examiners And Investigators","https://www.bls.gov/ooh/business-and-financial/claims-adjusters-appraisers-examiners-and-investigators.htm",0,0,0,0,"",""],
+  ["C","Cyber Investigation Technology","Career (C)","None","Partially","2024",76790,36.92,365300,-5,-18900,0,"High","Claims Adjusters and Investigators","https://www.bls.gov/ooh/business-and-financial/claims-adjusters-appraisers-examiners-and-investigators.htm",0,0,0,0,"",""],
   ["D","Data Analytics","Career (C)","None","No","2023",108020,0,198100,35,0,78,"High","","",0,0,0,0,"",""],
   ["D","Dental Hygiene","Career (C)","None","No","2023",81400,0,218350,9,0,80,"Low","","",0,0,0,0,"",""],
   ["D","Digital Media Design","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
@@ -611,7 +611,7 @@ const RAW_DATA = [
   ["H","Health Information Management","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["H","Health Sciences","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium","","",0,0,0,0,"",""],
   ["H","Health Sciences Pre-Professional Studies","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Medium","","",0,0,0,0,"",""],
-  ["H","Heating Ventilating Air Conditioning & Refrigeration (HVACR) Technology","Career (C)","None","Yes","2024",59810,28.75,425200,34500,34500,0,"Low","Heating Air Conditioning And Refrigeration Mechanics And Installers","https://www.bls.gov/ooh/installation-maintenance-and-repair/heating-air-conditioning-and-refrigeration-mechanics-and-installers.htm",0,0,0,0,"",""],
+  ["H","Heating Ventilating Air Conditioning & Refrigeration (HVACR) Technology","Career (C)","None","Yes","2024",59810,28.75,425200,8,34500,0,"Low","Heating Air Conditioning And Refrigeration Mechanics And Installers","https://www.bls.gov/ooh/installation-maintenance-and-repair/heating-air-conditioning-and-refrigeration-mechanics-and-installers.htm",0,0,0,0,"","Associate's"],
   ["H","History","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["H","Hospitality Management & Tourism","Career (C)","None","No","2023",0,0,0,0,0,0,"Low","","",0,0,0,0,"",""],
   ["H","Hospitality Management & Tourism/Bakery & Pastry Arts","Career (C)","None","No","2023",0,0,0,0,0,0,"Low","","",0,0,0,0,"",""],
@@ -619,7 +619,7 @@ const RAW_DATA = [
   ["H","Hospitality Management & Tourism/Lodging","Career (C)","None","No","2023",0,0,0,0,0,0,"Low","","",0,0,0,0,"",""],
   ["H","Hospitality Management & Tourism/Meeting & Event Planning","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["I","Industrial and Systems Engineering Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium","","",0,0,0,0,"",""],
-  ["I","Information Technology","Individualized (I)","None","No","2023",0,0,0,0,0,0,"High","Computer And Information Systems Managers","https://www.bls.gov/ooh/management/computer-and-information-systems-managers.htm",0,0,0,0,"",""],
+  ["I","Information Technology","Individualized (I)","None","Partially","2024",171200,81.31,667100,15,101600,0,"High","Computer And Information Systems Managers","https://www.bls.gov/ooh/management/computer-and-information-systems-managers.htm",0,0,0,0,"","Bachelor's"],
   ["I","Interior Design","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["I","Internet of Things (IoT) Cyber Technician","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["I","Interpreter Education","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
@@ -631,7 +631,7 @@ const RAW_DATA = [
   ["M","Mechanical Engineering Technology","Career (C)","None","No","2023",68490,0,45320,2,0,72,"Medium","","",0,0,0,0,"",""],
   ["M","Medical Laboratory Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium","","",0,0,0,0,"",""],
   ["M","Mental Health Services","Career (C)","None","No","2023",0,0,0,0,0,0,"Low","","",0,0,0,0,"",""],
-  ["M","Modern Languages","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High","Speech Language Pathologists","https://www.bls.gov/ooh/healthcare/speech-language-pathologists.htm",0,0,0,0,"",""],
+  ["M","Modern Languages","University Parallel (P)","None","Partially","2024",95410,45.87,187400,15,28200,0,"High","Speech Language Pathologists","https://www.bls.gov/ooh/healthcare/speech-language-pathologists.htm",0,0,0,0,"","Master's"],
   ["M","Music","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""],
   ["N","Neurodiagnostic Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Low","","",0,0,0,0,"",""],
   ["N","Nursing","Career (C)","None","No","2023",86070,0,3130600,6,0,83,"Low","","",0,0,0,0,"",""],
@@ -656,6 +656,10 @@ const RAW_DATA = [
   ["V","Veterinary Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Low","","",0,0,0,0,"",""],
   ["V","Visual Communications","Career (C)","None","No","2023",0,0,0,0,0,0,"High","","",0,0,0,0,"",""]
 ];
+
+
+
+
 
 
 
@@ -1026,7 +1030,8 @@ function bindTooltips(progs, datasets) {
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     const vw = window.innerWidth;
     let tx = clientX + 12;
-    if (tx + 210 > vw) tx = clientX - 215; // flip if near edge
+    // Updated width logic (approx 240px max-width)
+    if (tx + 250 > vw) tx = clientX - 255; // flip if near edge
     
     // If tooltip has links, allow pointer events so user can preserve hover to click.
     // NOTE: Sticky tooltips replace this need for clicking, but we keep hover clickable for quick access.
@@ -1056,7 +1061,7 @@ function bindTooltips(progs, datasets) {
     card.style.zIndex   = 1000 + document.querySelectorAll('.sticky-card').length; // simple layering
     card.style.opacity  = 1;
     card.style.pointerEvents = 'auto'; // Must be clickable
-    card.style.width = '240px';
+    card.style.width = '280px'; /* Approximately 15% wider */
     card.style.maxHeight = '80vh';
     card.style.overflowY = 'auto';
     card.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
@@ -1065,7 +1070,7 @@ function bindTooltips(progs, datasets) {
     let left = (e.touches ? e.touches[0].clientX : e.clientX) + 20;
     let top  = (e.touches ? e.touches[0].clientY : e.clientY) + 20;
     // Bounds check
-    if (left + 240 > window.innerWidth) left = window.innerWidth - 260;
+    if (left + 280 > window.innerWidth) left = window.innerWidth - 300;
     if (top + 300 > window.innerHeight) top = window.innerHeight - 350;
     card.style.left = left + 'px';
     card.style.top  = top + 'px';
