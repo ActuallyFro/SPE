@@ -293,6 +293,24 @@
   }
   .tooltip-footer.verified { background: #dcfce7; color: #166534; border-top-color: #bbf7d0; }
   .tooltip-footer.unverified { background: #f3f4f6; color: #6b7280; border-top-color: #e5e7eb; }
+  .tooltip-footer.potential { background: #ffedd5; color: #9a3412; border-top-color: #fed7aa; }
+
+  .tooltip-bls {
+    display: block;
+    margin: 10px -14px -10px;
+    padding: 6px 14px;
+    font-size: 10px;
+    background: #f0f9ff;
+    color: #0369a1;
+    border-top: 1px solid #e0f2fe;
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+    text-decoration: none;
+    transition: background 0.2s;
+    cursor: pointer;
+    pointer-events: auto; /* Allow clicking */
+  }
+  .tooltip-bls:hover { background: #e0f2fe; text-decoration: underline; }
 
   /* ── ACCORDION ── */
   .accordion { display: flex; flex-direction: column; gap: 4px; }
@@ -339,6 +357,7 @@
   }
   .status-band.verified { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
   .status-band.unverified { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
+  .status-band.potential { background: #ffedd5; color: #9a3412; border: 1px solid #fed7aa; }
   .interest-select {
     padding: 4px 8px;
     border-radius: var(--radius);
@@ -521,114 +540,121 @@
 //   10: JobOutlookChanges
 //   11: JobSatisfaction
 //   12: AIImpact
+//   13: BLSName
+//   14: BLSUrl
+//   15: OEWSOhioMedianSalary
+//   16: OEWSOhioPayPerHour
+//   17: OEWSOhioEmployment
+//   18: OEWSOhioEmploymentPer1000
+//   19: OEWSOhioURL
 // ─────────────────────────────────────────────
 const RAW_DATA = [
-  ["A","Accounting","Career (C)","None","Yes","2024",81680,39.27,1579800,5,72800,0,"High"],
-  ["A","Addiction Services","Career (C)","None","No","2023",49330,0,342940,18,0,71,"Low"],
-  ["A","Agricultural Sciences","Career (C)","None","No","2023",55380,0,39540,6,0,68,"Medium"],
-  ["A","Applied Psychology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["A","Architectural Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["A","Art","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["A","Associate of Arts","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["A","Associate of Individualized Study","Individualized (I)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["A","Associate of Science","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["A","Associate of Technical Study","Individualized (I)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["A","Automation & Control Technology with Robotics","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["A","Automotive Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["A","Automotive Technology (GM ASEP)","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["A","Automotive Technology (Honda PACT)","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["A","Automotive Technology (Mopar CAP)","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["A","Aviation Maintenance Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["A","Aviation Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["A","Aviation Technology/Professional Pilot","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["B","Biology","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["B","Biology Education","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["B","Biomedical Engineering Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["B","Biotechnology","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["B","Building and Industrial Technology","Individualized (I)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["B","Business Administration","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["B","Business Information Systems","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["B","Business Management","Career (C)","None","No","2023",79050,0,2750000,5,0,67,"High"],
-  ["B","Business Management/Digital Marketing","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["B","Business Management/Entrepreneurship","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["B","Business Management/Supply Chain Management","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["B","Business Technology","Individualized (I)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["C","Civil Engineering Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["C","Communication Studies","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["C","Computer Aided Manufacturing/CNC Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["C","Computer Information Systems/Network Engineering","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["C","Computer Information Systems/Secure System Administration","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["C","Computer Information Systems/Software Development","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["C","Computer Information Systems/User Support","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["C","Computer Information Systems/Web Development","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["C","Computer Science","University Parallel (P)","None","No","2023",136620,0,1850000,26,0,74,"High"],
-  ["C","Construction Management Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["C","Correctional Rehabilitation","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["C","Creative Writing","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["C","Criminal Justice Science/Corrections","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["C","Criminal Justice Science/Law Enforcement","Career (C)","None","No","2023",69160,0,686710,3,0,65,"Low"],
-  ["C","Culinary Entrepreneurship","Career (C)","None","No","2023",56520,0,150000,15,0,69,"Low"],
-  ["C","Cyber Investigation Technology","Career (C)","None","No","2023",99860,0,168900,32,0,76,"High"],
-  ["D","Data Analytics","Career (C)","None","No","2023",108020,0,198100,35,0,78,"High"],
-  ["D","Dental Hygiene","Career (C)","None","No","2023",81400,0,218350,9,0,80,"Low"],
-  ["D","Digital Media Design","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["E","Early Childhood Education","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["E","Electrical Construction Management","Career (C)","None","No","2023",71040,0,739200,11,0,70,"Low"],
-  ["E","Electronics Engineering Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["E","Elementary Education","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["E","Emergency Medical Services/Fire Science","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["E","Engineering and Engineering Technology University Transfer","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["E","English","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["G","Geography","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["G","Geospatial Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["H","Health and Allied Health Technology","Individualized (I)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["H","Health Information Management","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["H","Health Sciences","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["H","Health Sciences Pre-Professional Studies","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["H","Heating Ventilating Air Conditioning & Refrigeration (HVACR) Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["H","History","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["H","Hospitality Management & Tourism","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["H","Hospitality Management & Tourism/Bakery & Pastry Arts","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["H","Hospitality Management & Tourism/Culinary Arts","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["H","Hospitality Management & Tourism/Lodging","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["H","Hospitality Management & Tourism/Meeting & Event Planning","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["I","Industrial and Systems Engineering Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["I","Information Technology","Individualized (I)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["I","Interior Design","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["I","Internet of Things (IoT) Cyber Technician","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["I","Interpreter Education","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["L","Legal Studies","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["M","Manufacturing Engineering Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["M","Manufacturing Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["M","Math Education","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["M","Mathematics","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["M","Mechanical Engineering Technology","Career (C)","None","No","2023",68490,0,45320,2,0,72,"Medium"],
-  ["M","Medical Laboratory Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["M","Mental Health Services","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["M","Modern Languages","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["M","Music","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["N","Neurodiagnostic Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["N","Nursing","Career (C)","None","No","2023",86070,0,3130600,6,0,83,"Low"],
-  ["N","Nutrition and Dietetics Technician","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["O","Occupational Therapy Assistant","Career (C)","None","No","2023",64250,0,52040,25,0,82,"Low"],
-  ["P","Physical Therapist Assistant","Career (C)","None","No","2023",64550,0,95820,24,0,85,"Low"],
-  ["P","Political Science","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["P","Psychology","University Parallel (P)","None","No","2023",85330,0,181690,6,0,73,"Medium"],
-  ["Q","Quality Engineering Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["R","Radiologic Technology","Career (C)","None","No","2023",63710,0,216390,6,0,77,"Medium"],
-  ["R","Real Estate","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["R","Respiratory Care","Career (C)","None","No","2023",73430,0,134750,14,0,79,"Low"],
-  ["S","Services Technology","Individualized (I)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["S","Social Work","University Parallel (P)","None","No","2023",58380,0,708100,9,0,76,"Low"],
-  ["S","Sociology","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["S","Sport and Recreation Education","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["S","Surgical Technology","Career (C)","None","No","2023",58740,0,118800,7,0,75,"Low"],
-  ["S","Sustainability and Energy Management Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["T","Theatre Performance","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["T","Theatre Technology","University Parallel (P)","None","No","2023",0,0,0,0,0,0,"Medium"],
-  ["U","Unmanned Aerial Systems","Career (C)","None","No","2023",0,0,0,0,0,0,"High"],
-  ["V","Veterinary Technology","Career (C)","None","No","2023",0,0,0,0,0,0,"Low"],
-  ["V","Visual Communications","Career (C)","None","No","2023",0,0,0,0,0,0,"High"]
+  ["A", "Accounting", "Career (C)", "None", "Yes", "2024", 81680, 39.27, 1579800, 5, 72800, 0, "High", "Accountants and Auditors", "https://www.bls.gov/ooh/business-and-financial/accountants-and-auditors.htm", 75200, 36.15, 48200, 9.2, "https://ohiolmi.com"],
+  ["A", "Addiction Services", "Career (C)", "None", "No", "2023", 49330, 0.0, 342940, 18, 0, 71, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Agricultural Sciences", "Career (C)", "None", "No", "2023", 55380, 0.0, 39540, 6, 0, 68, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Applied Psychology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Architectural Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Art", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Associate of Arts", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Associate of Individualized Study", "Individualized (I)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Associate of Science", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Associate of Technical Study", "Individualized (I)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Automation & Control Technology with Robotics", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Automotive Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Automotive Technology (GM ASEP)", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Automotive Technology (Honda PACT)", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Automotive Technology (Mopar CAP)", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Aviation Maintenance Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Aviation Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["A", "Aviation Technology/Professional Pilot", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["B", "Biology", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["B", "Biology Education", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["B", "Biomedical Engineering Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["B", "Biotechnology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["B", "Building and Industrial Technology", "Individualized (I)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["B", "Business Administration", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["B", "Business Information Systems", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["B", "Business Management", "Career (C)", "None", "No", "2023", 79050, 0.0, 2750000, 5, 0, 67, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["B", "Business Management/Digital Marketing", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["B", "Business Management/Entrepreneurship", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["B", "Business Management/Supply Chain Management", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["B", "Business Technology", "Individualized (I)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Civil Engineering Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Communication Studies", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Computer Aided Manufacturing/CNC Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Computer Information Systems/Network Engineering", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Computer Information Systems/Secure System Administration", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Computer Information Systems/Software Development", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Computer Information Systems/User Support", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Computer Information Systems/Web Development", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Computer Science", "University Parallel (P)", "None", "No", "2023", 136620, 0.0, 1850000, 26, 0, 74, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Construction Management Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Correctional Rehabilitation", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Creative Writing", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Criminal Justice Science/Corrections", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Criminal Justice Science/Law Enforcement", "Career (C)", "None", "No", "2023", 69160, 0.0, 686710, 3, 0, 65, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Culinary Entrepreneurship", "Career (C)", "None", "No", "2023", 56520, 0.0, 150000, 15, 0, 69, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["C", "Cyber Investigation Technology", "Career (C)", "None", "No", "2023", 99860, 0.0, 168900, 32, 0, 76, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["D", "Data Analytics", "Career (C)", "None", "No", "2023", 108020, 0.0, 198100, 35, 0, 78, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["D", "Dental Hygiene", "Career (C)", "None", "No", "2023", 81400, 0.0, 218350, 9, 0, 80, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["D", "Digital Media Design", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["E", "Early Childhood Education", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["E", "Electrical Construction Management", "Career (C)", "None", "No", "2023", 71040, 0.0, 739200, 11, 0, 70, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["E", "Electronics Engineering Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["E", "Elementary Education", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["E", "Emergency Medical Services/Fire Science", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["E", "Engineering and Engineering Technology University Transfer", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["E", "English", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["G", "Geography", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["G", "Geospatial Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["H", "Health and Allied Health Technology", "Individualized (I)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["H", "Health Information Management", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["H", "Health Sciences", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["H", "Health Sciences Pre-Professional Studies", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["H", "Heating Ventilating Air Conditioning & Refrigeration (HVACR) Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["H", "History", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["H", "Hospitality Management & Tourism", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["H", "Hospitality Management & Tourism/Bakery & Pastry Arts", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["H", "Hospitality Management & Tourism/Culinary Arts", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["H", "Hospitality Management & Tourism/Lodging", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["H", "Hospitality Management & Tourism/Meeting & Event Planning", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["I", "Industrial and Systems Engineering Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["I", "Information Technology", "Individualized (I)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["I", "Interior Design", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["I", "Internet of Things (IoT) Cyber Technician", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["I", "Interpreter Education", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["L", "Legal Studies", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["M", "Manufacturing Engineering Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["M", "Manufacturing Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["M", "Math Education", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["M", "Mathematics", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["M", "Mechanical Engineering Technology", "Career (C)", "None", "No", "2023", 68490, 0.0, 45320, 2, 0, 72, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["M", "Medical Laboratory Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["M", "Mental Health Services", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["M", "Modern Languages", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["M", "Music", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["N", "Neurodiagnostic Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["N", "Nursing", "Career (C)", "None", "No", "2023", 86070, 0.0, 3130600, 6, 0, 83, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["N", "Nutrition and Dietetics Technician", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["O", "Occupational Therapy Assistant", "Career (C)", "None", "No", "2023", 64250, 0.0, 52040, 25, 0, 82, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["P", "Physical Therapist Assistant", "Career (C)", "None", "No", "2023", 64550, 0.0, 95820, 24, 0, 85, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["P", "Political Science", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["P", "Psychology", "University Parallel (P)", "None", "No", "2023", 85330, 0.0, 181690, 6, 0, 73, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["Q", "Quality Engineering Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["R", "Radiologic Technology", "Career (C)", "None", "No", "2023", 63710, 0.0, 216390, 6, 0, 77, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["R", "Real Estate", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["R", "Respiratory Care", "Career (C)", "None", "No", "2023", 73430, 0.0, 134750, 14, 0, 79, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["S", "Services Technology", "Individualized (I)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["S", "Social Work", "University Parallel (P)", "None", "No", "2023", 58380, 0.0, 708100, 9, 0, 76, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["S", "Sociology", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["S", "Sport and Recreation Education", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["S", "Surgical Technology", "Career (C)", "None", "No", "2023", 58740, 0.0, 118800, 7, 0, 75, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["S", "Sustainability and Energy Management Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["T", "Theatre Performance", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["T", "Theatre Technology", "University Parallel (P)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Medium", "", "", 0, 0.0, 0, 0.0, ""],
+  ["U", "Unmanned Aerial Systems", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""],
+  ["V", "Veterinary Technology", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "Low", "", "", 0, 0.0, 0, 0.0, ""],
+  ["V", "Visual Communications", "Career (C)", "None", "No", "2023", 0, 0.0, 0, 0, 0, 0, "High", "", "", 0, 0.0, 0, 0.0, ""]
 ];
 
 
@@ -677,7 +703,14 @@ function buildPrograms() {
       growth:       r[9] || 0,
       outlookChg:   r[10] || 0,
       satisfaction: r[11] || 0,
-      aiImpact:     r[12] || 'Low' // Default if missing
+      aiImpact:     r[12] || 'Low',
+      blsTitle:     r[13] || '',
+      blsUrl:       r[14] || '',
+      oewsSalary:   r[15] || 0,
+      oewsHourly:   r[16] || 0,
+      oewsJobs:     r[17] || 0,
+      oewsDensity:  r[18] || 0,
+      oewsUrl:      r[19] || ''
     };
   });
 }
@@ -902,14 +935,16 @@ function renderChart() {
 }
 
 // ─────────────────────────────────────────────
-//  TOOLTIP — works for both mouse and touch
+//  TOOLTIP — Mouseover Preview & Click-to-Pin
 // ─────────────────────────────────────────────
 function bindTooltips(progs, datasets) {
   const tooltip = document.getElementById('tooltip');
-
-  function show(e, idx) {
-    const p = progs[idx];
+  
+  // Helper: Generate inner content for tooltip
+  function getTooltipHTML(p, idx) {
     let rows = `<div class="tooltip-title">${p.title}</div>`;
+
+    // Charted values
     datasets.forEach(d => {
       const raw = d.vals[idx];
       let display = '—';
@@ -926,47 +961,207 @@ function bindTooltips(progs, datasets) {
         <strong>${display}</strong>
       </div>`;
     });
-    // Add extra details not on chart
+
+    // Extra Details
     rows += `<div class="tooltip-row"><span style="color:var(--text-dim)">Hourly:</span> <strong>${p.hourly > 0 ? '$' + p.hourly : '—'}</strong></div>`;
     
-    // Outlook Change: Show +/-, or — if 0
     let outlook = '—';
     if (p.outlookChg !== 0) outlook = (p.outlookChg >= 0 ? '+' : '') + p.outlookChg.toLocaleString();
     rows += `<div class="tooltip-row"><span style="color:var(--text-dim)">Outlook Change:</span> <strong>${outlook}</strong></div>`;
-
-    // Satisfaction: Show %, or — if 0
     rows += `<div class="tooltip-row"><span style="color:var(--text-dim)">Satisfaction:</span> <strong>${p.satisfaction > 0 ? p.satisfaction + '%' : '—'}</strong></div>`;
     
-    // Type + Year
     rows += `<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border);color:var(--text-dim);font-size:9px">${p.type}${p.year ? ' • '+p.year : ''}</div>`;
     
-    // Status Footer
-    const isVer = p.verified && p.verified.toLowerCase() === 'yes';
-    if (isVer) {
-      rows += `<div class="tooltip-footer verified">✓ Verified Data</div>`;
-    } else {
-      rows += `<div class="tooltip-footer unverified">Unverified Data</div>`;
+    // Ohio / OEWS Section
+    if (p.oewsJobs > 0 || p.oewsSalary > 0) {
+      rows += `<div style="margin:8px 0 4px; padding-top:6px; border-top:1px dashed var(--border); font-size:10px; font-weight:600; color:var(--text-dim)">OHIO DATA (OEWS)</div>`;
+      if (p.oewsSalary > 0) rows += `<div class="tooltip-row"><span style="color:var(--text-dim)">Salary:</span> <strong>$${p.oewsSalary.toLocaleString()}</strong></div>`;
+      if (p.oewsHourly > 0) rows += `<div class="tooltip-row"><span style="color:var(--text-dim)">Hourly:</span> <strong>$${p.oewsHourly.toLocaleString(undefined, {minimumFractionDigits:2})}</strong></div>`;
+      if (p.oewsJobs > 0)   rows += `<div class="tooltip-row"><span style="color:var(--text-dim)">Jobs:</span> <strong>${p.oewsJobs.toLocaleString()}</strong></div>`;
+      if (p.oewsDensity > 0) rows += `<div class="tooltip-row"><span style="color:var(--text-dim)">Per 1k Jobs:</span> <strong>${p.oewsDensity}</strong></div>`;
     }
 
-    tooltip.innerHTML = rows;
+    // Verification Status
+    const isVer = p.verified && p.verified.toLowerCase() === 'yes';
+    const isPot = p.verified && (p.verified.toLowerCase().includes('pot') || p.verified.toLowerCase().includes('part'));
+    if (isVer) {
+      rows += `<div class="tooltip-footer verified">✓ Verified Match</div>`;
+    } else if (isPot) {
+      rows += `<div class="tooltip-footer potential">⚠ Potential Match</div>`;
+    } else {
+      rows += `<div class="tooltip-footer unverified">Data Not Verified</div>`;
+    }
 
+    // Links
+    if (p.blsUrl && p.blsTitle) {
+      rows += `<a href="${p.blsUrl}" target="_blank" class="tooltip-bls">BLS.gov Link to <em>${p.blsTitle}</em></a>`;
+    }
+    if (p.oewsUrl && p.oewsUrl !== p.blsUrl) {
+      rows += `<a href="${p.oewsUrl}" target="_blank" class="tooltip-bls" style="border-top:1px dashed #e0f2fe">Ohio Data Link (OEWS)</a>`;
+    }
+    return rows;
+  }
+
+  // Mouseover: Show transient tooltip
+  function show(e, idx) {
+    const p = progs[idx];
+    tooltip.innerHTML = getTooltipHTML(p, idx);
+    
+    // Position Logic
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     const vw = window.innerWidth;
     let tx = clientX + 12;
-    if (tx + 210 > vw) tx = clientX - 215;
-    tooltip.style.left  = tx + 'px';
-    tooltip.style.top   = (clientY - 20) + 'px';
+    if (tx + 210 > vw) tx = clientX - 215; // flip if near edge
+    
+    // If tooltip has links, allow pointer events so user can preserve hover to click.
+    // NOTE: Sticky tooltips replace this need for clicking, but we keep hover clickable for quick access.
+    if (p.blsUrl || p.oewsUrl) {
+       tooltip.style.pointerEvents = 'auto';
+       if (tx > clientX) tx += 10; else tx -= 10; // offset slightly
+    } else {
+       tooltip.style.pointerEvents = 'none';
+    }
+
+    tooltip.style.left = tx + 'px';
+    tooltip.style.top  = (clientY - 20) + 'px';
     tooltip.classList.add('visible');
   }
 
   function hide() { tooltip.classList.remove('visible'); }
 
-  document.getElementById('chart-svg').querySelectorAll('.hit-area').forEach(el => {
-    el.addEventListener('mousemove', e => show(e, +el.dataset.prog));
+  // Click: Spawn Sticky Tooltip
+  function pinTooltip(e, idx) {
+    e.preventDefault();
+    const p = progs[idx];
+    
+    // Create new element
+    const card = document.createElement('div');
+    card.className = 'tooltip-box sticky-card';
+    card.style.position = 'fixed';
+    card.style.zIndex   = 1000 + document.querySelectorAll('.sticky-card').length; // simple layering
+    card.style.opacity  = 1;
+    card.style.pointerEvents = 'auto'; // Must be clickable
+    card.style.width = '240px';
+    card.style.maxHeight = '80vh';
+    card.style.overflowY = 'auto';
+    card.style.boxShadow = '0 8px 24px rgba(0,0,0,0.15)';
+    
+    // Initial Position (near click but cascaded)
+    let left = (e.touches ? e.touches[0].clientX : e.clientX) + 20;
+    let top  = (e.touches ? e.touches[0].clientY : e.clientY) + 20;
+    // Bounds check
+    if (left + 240 > window.innerWidth) left = window.innerWidth - 260;
+    if (top + 300 > window.innerHeight) top = window.innerHeight - 350;
+    card.style.left = left + 'px';
+    card.style.top  = top + 'px';
+
+    // Header with Drag Handle & Close Button
+    const header = document.createElement('div');
+    header.style.display = 'flex';
+    header.style.justifyContent = 'space-between';
+    header.style.alignItems = 'center';
+    header.style.marginBottom = '8px';
+    header.style.cursor = 'move';
+    header.style.borderBottom = '1px solid var(--border)';
+    header.style.paddingBottom = '6px';
+    header.title = 'Drag to move';
+
+    const titleSpan = document.createElement('span');
+    titleSpan.textContent = 'pinned'; 
+    titleSpan.style.fontSize = '9px'; 
+    titleSpan.style.textTransform = 'uppercase';
+    titleSpan.style.color = 'var(--text-dim)';
+    titleSpan.style.letterSpacing = '1px';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.innerHTML = '&times;';
+    closeBtn.style.background = 'none';
+    closeBtn.style.border = 'none';
+    closeBtn.style.fontSize = '18px';
+    closeBtn.style.lineHeight = '1';
+    closeBtn.style.padding = '0 4px';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.style.color = 'var(--text-dim)';
+    
+    closeBtn.onclick = () => card.remove();
+    
+    header.appendChild(titleSpan);
+    header.appendChild(closeBtn);
+    card.appendChild(header);
+
+    // Content Body
+    const body = document.createElement('div');
+    body.innerHTML = getTooltipHTML(p, idx);
+    // Remove duplicate title from HTML if desired, but reuse is fine.
+    card.appendChild(body);
+
+    document.body.appendChild(card);
+    
+    // Hide the hover tooltip so it doesn't overlap
+    hide();
+
+    // Draggable Logic
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    header.addEventListener('mousedown', startDrag);
+    header.addEventListener('touchstart', startDrag, {passive: false});
+
+    function startDrag(ev) {
+      if (ev.target === closeBtn) return;
+      isDragging = true;
+      const clientX = ev.touches ? ev.touches[0].clientX : ev.clientX;
+      const clientY = ev.touches ? ev.touches[0].clientY : ev.clientY;
+      const rect = card.getBoundingClientRect();
+      offsetX = clientX - rect.left;
+      offsetY = clientY - rect.top;
+      
+      // Bring to front
+      card.style.zIndex = 1000 + document.querySelectorAll('.sticky-card').length + 1;
+      
+      document.addEventListener('mousemove', onDrag);
+      document.addEventListener('mouseup', stopDrag);
+      document.addEventListener('touchmove', onDrag, {passive: false});
+      document.addEventListener('touchend', stopDrag);
+    }
+
+    function onDrag(ev) {
+      if (!isDragging) return;
+      ev.preventDefault(); // prevent scroll on touch
+      const clientX = ev.touches ? ev.touches[0].clientX : ev.clientX;
+      const clientY = ev.touches ? ev.touches[0].clientY : ev.clientY;
+      
+      card.style.left = (clientX - offsetX) + 'px';
+      card.style.top  = (clientY - offsetY) + 'px';
+    }
+
+    function stopDrag() {
+      isDragging = false;
+      document.removeEventListener('mousemove', onDrag);
+      document.removeEventListener('mouseup', stopDrag);
+      document.removeEventListener('touchmove', onDrag);
+      document.removeEventListener('touchend', stopDrag);
+    }
+  }
+
+  // Attach Listeners
+  const areas = document.getElementById('chart-svg').querySelectorAll('.hit-area');
+  const dots  = document.getElementById('chart-svg').querySelectorAll('circle');
+  
+  [...areas, ...dots].forEach(el => {
+    // Hover
+    el.addEventListener('mousemove', e => show(e, +el.dataset.prog || +el.dataset.idx)); // circles use dataset.idx
     el.addEventListener('mouseleave', hide);
-    el.addEventListener('touchstart', e => { e.preventDefault(); show(e, +el.dataset.prog); }, { passive: false });
+    // Touch hover (simulated)
+    el.addEventListener('touchstart', e => { 
+      // e.preventDefault(); // removed to allow scrolling unless it's a drag
+      show(e, +el.dataset.prog || +el.dataset.idx); 
+    }, { passive: true });
     el.addEventListener('touchend', () => setTimeout(hide, 1400));
+    
+    // Click to Pin
+    el.addEventListener('click', e => pinTooltip(e, +el.dataset.prog || +el.dataset.idx));
   });
 }
 
@@ -983,11 +1178,18 @@ function renderAccordion() {
       const opts = LEVELS.map(l =>
         `<option value="${l}"${p.interest === l ? ' selected' : ''}>${l}</option>`
       ).join('');
-      // Case-insensitive check for better user compatibility
       const isVer = p.verified && p.verified.toLowerCase() === 'yes';
-      const status = isVer
-        ? `<div class="status-band verified"><span>✓ Verified Data</span></div>`
-        : `<div class="status-band unverified"><span>Unverified Data</span></div>`;
+      const isPot = p.verified && (p.verified.toLowerCase().includes('pot') || p.verified.toLowerCase().includes('part'));
+      
+      let status;
+      if (isVer) {
+        status = `<div class="status-band verified"><span>✓ Verified Data</span></div>`;
+      } else if (isPot) {
+        status = `<div class="status-band potential"><span>⚠ Potential Match</span></div>`;
+      } else {
+        status = `<div class="status-band unverified"><span>Unverified Data</span></div>`;
+      }
+
 
       return `<div class="prog-row">
         <span class="prog-name">${p.title}</span>
@@ -1043,7 +1245,7 @@ function updateStats() {
 //  EXPORT CSV
 // ─────────────────────────────────────────────
 function exportCSV() {
-  const header = 'AlphabeticalLetter,Title,ProgramType,StudentInterestLevel,IsDataVerified,BLSDataYear,MedianSalary,MedianPayPerHour,CurrentNumberJobs,JobOutlookGrowthPercent,JobOutlookChanges,JobSatisfaction,AIImpact';
+  const header = 'AlphabeticalLetter,Title,ProgramType,StudentInterestLevel,IsDataVerified,BLSDataYear,MedianSalary,MedianPayPerHour,CurrentNumberJobs,JobOutlookGrowthPercent,JobOutlookChanges,JobSatisfaction,AIImpact,BLSTitle,BLSUrl,OEWSOhioMedianSalary,OEWSOhioPayPerHour,OEWSOhioEmployment,OEWSOhioEmploymentPer1000,OEWSOhioURL';
   const rows = programs.map(p => {
     const q = v => `"${String(v).replace(/"/g,'""')}"`;
     return [
@@ -1059,7 +1261,14 @@ function exportCSV() {
       p.growth,
       p.outlookChg,
       p.satisfaction,
-      p.aiImpact
+      p.aiImpact,
+      q(p.blsTitle || ''),
+      q(p.blsUrl || ''),
+      p.oewsSalary,
+      p.oewsHourly,
+      p.oewsJobs,
+      p.oewsDensity,
+      q(p.oewsUrl || '')
     ].join(',');
   });
   const csv  = header + '\n' + rows.join('\n');
@@ -1097,7 +1306,18 @@ function importCSV(input) {
     header.forEach((h, i) => {
       // Remove quotes and clean
       const key = h.replace(/"/g, '').trim();
-      if (key.includes('title')) colMap.title = i;
+      
+      // OEWS specific checks FIRST to avoid partial matches with generic columns
+      if (key.includes('oewsohiomediansalary') || key.includes('ohiosalary')) colMap.oewsSalary = i;
+      else if (key.includes('oewsohiopayperhour') || key.includes('ohiohourly')) colMap.oewsHourly = i;
+      else if (key.includes('oewsohioemploymentper1000')) colMap.oewsDensity = i;
+      else if (key.includes('oewsohioemployment') || key.includes('ohiojobs')) colMap.oewsJobs = i;
+      else if (key.includes('oewsohiourl')) colMap.oewsUrl = i;
+      
+      // Generic / BLS columns
+      else if (key.includes('blstitle') || key.includes('blsname')) colMap.blsTitle = i;
+      else if (key.includes('blsurl')) colMap.blsUrl = i;
+      else if (key.includes('title')) colMap.title = i;
       else if (key.includes('interest')) colMap.interest = i;
       else if (key.includes('verified')) colMap.verified = i;
       else if (key.includes('year')) colMap.year = i;
@@ -1154,6 +1374,9 @@ function importCSV(input) {
       
       if (p) {
         if (colMap.ai !== undefined) p.aiImpact = row[colMap.ai];
+        if (colMap.blsTitle !== undefined) p.blsTitle = row[colMap.blsTitle];
+        if (colMap.blsUrl !== undefined) p.blsUrl = row[colMap.blsUrl];
+        if (colMap.oewsUrl !== undefined) p.oewsUrl = row[colMap.oewsUrl];
 
         if (colMap.interest !== undefined) {
            let val = row[colMap.interest];
@@ -1176,6 +1399,11 @@ function importCSV(input) {
         if (colMap.growth !== undefined) p.growth = num(colMap.growth) || p.growth;
         if (colMap.outlookChg !== undefined) p.outlookChg = num(colMap.outlookChg) || p.outlookChg;
         if (colMap.satisfaction !== undefined) p.satisfaction = num(colMap.satisfaction) || p.satisfaction;
+    
+        if (colMap.oewsSalary !== undefined) p.oewsSalary = num(colMap.oewsSalary) || 0;
+        if (colMap.oewsHourly !== undefined) p.oewsHourly = num(colMap.oewsHourly) || 0;
+        if (colMap.oewsJobs !== undefined) p.oewsJobs = num(colMap.oewsJobs) || 0;
+        if (colMap.oewsDensity !== undefined) p.oewsDensity = num(colMap.oewsDensity) || 0;
         
         updatedCount++;
       }
