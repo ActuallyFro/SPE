@@ -3,6 +3,7 @@ import csv
 import sys
 import os
 import shutil
+import copy
 
 # ─────────────────────────────────────────────────────────────────
 #  UpdateEntry.py
@@ -179,39 +180,71 @@ def edit_row(data, idx, fieldnames):
         except ValueError:
             print("Invalid input.")
 
+def review_changes(data, original_data, fieldnames):
+    """Compare current data against original data and print differences."""
+    changes_found = False
+    print("\n🔍  REVIEW PENDING CHANGES")
+    print("──────────────────────────")
+
+    # For now, we assume row order/count hasn't changed
+    for i, row in enumerate(data):
+        if row != original_data[i]:
+            changes_found = True
+            print(f"\nRow {i+1}: {row.get('Title', 'Unknown')}")
+            for field in fieldnames:
+                old_val = original_data[i].get(field, '')
+                new_val = row.get(field, '')
+                if old_val != new_val:
+                    print(f"  📝  {field}:")
+                    print(f"      OLD: '{old_val}'")
+                    print(f"      NEW: '{new_val}'")
+
+    if not changes_found:
+        print("\n  (No changes detected)")
+    
+    input("\nPress Enter to return to menu...")
+
 def main():
     check_root()
     data, fieldnames = load_data()
-    modified = False
+    # Deep copy to track original state for diffs
+    original_data = copy.deepcopy(data)
     
     print("Welcome to Sinclair Data Editor")
     print("───────────────────────────────")
 
     while True:
-        status = " (Unsaved Changes Pending!)" if modified else ""
+        # Determine if there are pending changes
+        is_modified = (data != original_data)
+        status = " (Unsaved Changes Pending!)" if is_modified else ""
+
         print(f"\nMAIN MENU{status}")
         print("1. Select Row to Edit")
-        print("2. Save Changes")
-        print("3. Quit")
+        print("2. Review Pending Changes")
+        print("3. Save Changes")
+        print("4. Quit")
         
-        choice = input("\nChoose an option (1-3): ").strip()
+        choice = input("\nChoose an option (1-4): ").strip()
         
         if choice == '1':
             idx = select_row(data)
             if idx is not None:
                 edit_row(data, idx, fieldnames)
-                modified = True
                 
         elif choice == '2':
-            if modified:
+            review_changes(data, original_data, fieldnames)
+
+        elif choice == '3':
+            if is_modified:
                 save_data(data, fieldnames)
-                modified = False
+                # Update baseline after save
+                original_data = copy.deepcopy(data)
                 print("💡  Don't forget to run 'bash scripts/Merge-new_Main-Data.sh' to update the HTML!")
             else:
                 print("No changes to save.")
                 
-        elif choice == '3':
-            if modified:
+        elif choice == '4':
+            if is_modified:
                 confirm = input("⚠️  You have unsaved changes. Quit anyway? [y/N]: ").strip().lower()
                 if confirm != 'y':
                     continue
