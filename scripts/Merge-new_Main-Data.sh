@@ -86,7 +86,7 @@ try:
             year          = get(['blsdatayear', 'year'], '')
 
             # National Data
-            salary        = num(['mediansalary', 'meansalary', 'salary'])
+            salary        = num(['mediansalary', 'salary'])
             hourly        = num(['medianpayperhour', 'hourly'])
             jobs          = num(['currentnumberjobs', 'currentjobs', 'jobs'])
             growth_pct    = num(['joboutlookgrowthpercent', 'jobgrowth', 'growth'])
