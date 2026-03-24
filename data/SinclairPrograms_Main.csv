@@ -1,7 +1,7 @@
 ﻿AlphabeticalLetter,Title,ProgramType,StudentInterestLevel,IsDataVerified,BLSDataYear,MedianSalary,MedianPayPerHour,CurrentNumberJobs,JobOutlookGrowthPercent,JobOutlookChanges,JobSatisfaction,AIImpact,BLSTitle,BLSUrl,OEWSOhioMedianSalary,OEWSOhioPayPerHour,OEWSOhioEmployment,OEWSOhioEmploymentPer1000,OEWSOhioURL,EntryLevelDegree
 A,Accounting,Career (C),None,Yes,2024,81680,39.27,1579800,5,72800,0,High,Accountants and Auditors,https://www.bls.gov/ooh/business-and-financial/accountants-and-auditors.htm,0,0,0,0,,
 A,Addiction Services,Career (C),None,No,2023,49330,0,342940,18,0,71,Low,,,0,0,0,0,,
-A,Agricultural Sciences,Career (C),None,No,2023,55380,0,39540,6,0,68,Medium,Agricultural And Food Scientists,https://www.bls.gov/ooh/life-physical-and-social-science/agricultural-and-food-scientists.htm,0,0,0,0,,
+A,Agricultural Sciences,Career (C),None,Yes,2024,78770,37.87,39540,6,2300,0,Medium,Agricultural And Food Scientists,https://www.bls.gov/ooh/life-physical-and-social-science/agricultural-and-food-scientists.htm,0,0,0,0,,Bachelor's
 A,Applied Psychology,Career (C),None,No,2023,0,0,0,0,0,0,Medium,,,0,0,0,0,,
 A,Architectural Technology,Career (C),None,Partially,2024,65380,31.44,192100,0,-600,0,High,Drafters,https://www.bls.gov/ooh/architecture-and-engineering/drafters.htm,0,0,0,0,,Associate's
 A,Art,University Parallel (P),None,No,2023,0,0,0,0,0,0,High,,,0,0,0,0,,
@@ -74,8 +74,8 @@ I,Interior Design,Career (C),None,No,2023,0,0,0,0,0,0,High,,,0,0,0,0,,
 I,Internet of Things (IoT) Cyber Technician,Career (C),None,No,2023,0,0,0,0,0,0,High,,,0,0,0,0,,
 I,Interpreter Education,Career (C),None,No,2023,0,0,0,0,0,0,High,,,0,0,0,0,,
 L,Legal Studies,Career (C),None,No,2023,0,0,0,0,0,0,High,,,0,0,0,0,,
-M,Manufacturing Engineering Technology,Career (C),None,No,2023,0,0,0,0,0,0,Medium,Industrial Engineers,https://www.bls.gov/ooh/architecture-and-engineering/industrial-engineers.htm,0,0,0,0,,
-M,Manufacturing Technology,Career (C),None,No,2023,0,0,0,0,0,0,Low,Industrial Production Managers,https://www.bls.gov/ooh/management/industrial-production-managers.htm,0,0,0,0,,
+M,Manufacturing Engineering Technology,Career (C),None,Yes,2024,101140,48.63,351100,11,38500,0,Medium,Industrial Engineers,https://www.bls.gov/ooh/architecture-and-engineering/industrial-engineers.htm,0,0,0,0,,Bachelor's
+M,Manufacturing Technology,Career (C),None,Partially,2024,121440,58.39,241900,2,4600,0,Low,Industrial Production Managers,https://www.bls.gov/ooh/management/industrial-production-managers.htm,0,0,0,0,,Bachelor's
 M,Math Education,University Parallel (P),None,No,2023,0,0,0,0,0,0,Low,,,0,0,0,0,,
 M,Mathematics,University Parallel (P),None,No,2023,0,0,0,0,0,0,High,,,0,0,0,0,,
 M,Mechanical Engineering Technology,Career (C),None,No,2023,68490,0,45320,2,0,72,Medium,,,0,0,0,0,,
