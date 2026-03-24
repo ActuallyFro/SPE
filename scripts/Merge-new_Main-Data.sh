@@ -71,7 +71,7 @@ try:
                 if val and val != '-' and val.lower() != 'nan':
                     try: return float(val)
                     except ValueError: pass
-                return 0
+                return None  # Return None (JSON null) for missing values instead of 0
 
             # ── Column Extraction ───────────────────────────────────────
             letter        = get(['alphabeticalletter', 'letter'], '?').upper()

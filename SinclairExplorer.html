@@ -38,6 +38,24 @@
     --font-mono: 'DM Mono', monospace;
     --font-display: 'Fraunces', serif;
   }
+
+  /* Dark Theme Override */
+  body.dark-mode {
+    --bg:        #111827;
+    --surface:   #1f2937;
+    --border:    #374151;
+    --muted:     #9ca3af;
+    --text:      #f3f4f6;
+    --text-dim:  #9ca3af;
+    --accent:    #f87171;
+
+    /* Brighten chart lines for contrast on dark bg */
+    --col-salary:   #4ade80;
+    --col-jobs:     #60a5fa;
+    --col-growth:   #c084fc;
+    --col-ai:       #fb923c;
+  }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     background: var(--bg);
@@ -517,7 +535,15 @@
     </div>
   </section>
 
+  <!-- Dark Mode Toggle -->
+  <div style="text-align:center; margin: 30px 0;">
+    <button id="theme-toggle" class="secondary" style="font-size:12px; padding:6px 12px;">
+      🌓 Switch Theme
+    </button>
+  </div>
+
 </main>
+
 
 <!-- Tooltip rendered outside main for fixed positioning -->
 <div class="tooltip-box" id="tooltip"></div>
@@ -675,6 +701,8 @@ const RAW_DATA = [
 
 
 
+
+
 // ─────────────────────────────────────────────
 //  STATE
 // ─────────────────────────────────────────────
@@ -707,12 +735,12 @@ function buildPrograms() {
       interest:     interest,
       verified:     r[4] || 'No',
       year:         r[5] || '',
-      salary:       r[6] || 0,
-      hourly:       r[7] || 0,
-      jobs:         r[8] || 0,
-      growth:       r[9] || 0,
+      salary:       r[6] !== null ? r[6] : null,
+      hourly:       r[7] !== null ? r[7] : null,
+      jobs:         r[8] !== null ? r[8] : null,
+      growth:       r[9] !== null ? r[9] : null,
       outlookChg:   r[10] || 0,
-      satisfaction: r[11] || 0,
+      satisfaction: r[11] !== null ? r[11] : null,
       aiImpact:     r[12] || 'Low',
       blsTitle:     r[13] || '',
       blsUrl:       r[14] || '',
@@ -742,6 +770,18 @@ function saveSettings() {
   const data = { activeFilters, sortCol, sortDir, activeLines };
   try { localStorage.setItem(STORAGE_SETTINGS_KEY, JSON.stringify(data)); } catch(e) {}
 }
+
+const STORAGE_THEME_KEY = 'sinclair_theme_v1';
+function toggleTheme() {
+  document.body.classList.toggle('dark-mode');
+  localStorage.setItem(STORAGE_THEME_KEY, document.body.classList.contains('dark-mode'));
+}
+// Init theme
+try {
+  if (localStorage.getItem(STORAGE_THEME_KEY) === 'true') {
+    document.body.classList.add('dark-mode');
+  }
+} catch(e) {}
 
 function loadSettings() {
   try {
@@ -774,18 +814,22 @@ function syncControls() {
     if (activeLines[col]) btn.classList.add('active');
     else btn.classList.remove('active');
   });
+
+  // Sync Theme Button
+  const themeBtn = document.getElementById('theme-toggle');
+  if (themeBtn) themeBtn.onclick = toggleTheme;
 }
 
 // ─────────────────────────────────────────────
 //  NORMALIZE (0–100 scale per dataset)
 // ─────────────────────────────────────────────
 function normalize(vals) {
-  // Allow negative values for growth, but treat 0 as missing
-  const filled = vals.filter(v => v !== null && v !== 0);
+  // Allow negative values for growth, and allow 0. Only filter out null/undefined.
+  const filled = vals.filter(v => v !== null && v !== undefined);
   if (!filled.length) return vals.map(() => null);
   const mn = Math.min(...filled), mx = Math.max(...filled);
-  if (mx === mn) return vals.map(v => v !== 0 ? 50 : null);
-  return vals.map(v => (v === null || v === 0) ? null : ((v - mn) / (mx - mn)) * 100);
+  if (mx === mn) return vals.map(v => (v !== null && v !== undefined) ? 50 : null);
+  return vals.map(v => (v === null || v === undefined) ? null : ((v - mn) / (mx - mn)) * 100);
 }
 
 // ─────────────────────────────────────────────
@@ -848,7 +892,7 @@ function updateFilter(level) {
 // ─────────────────────────────────────────────
 //  RENDER CHART
 // ─────────────────────────────────────────────
-const PAD = { top: 16, right: 12, bottom: 72, left: 42 };
+const PAD = { top: 16, right: 12, bottom: 72, left: 60 }; // Increased left padding from 42 to 60
 const CHART_H = 240;
 
 function renderChart() {
@@ -884,7 +928,7 @@ function renderChart() {
     // For qualitative metrics (Interest, AI), use fixed 0-100 scale
     // to prevent values jumping around when one category is filtered out.
     if (d.key === 'interest' || d.key === 'ai') {
-      d.norm = d.vals.map(v => (v === 0 ? null : v));
+      d.norm = d.vals.map(v => (v === null || v === 0 ? null : v));
     } else {
       d.norm = normalize(d.vals);
     }
@@ -959,7 +1003,7 @@ function bindTooltips(progs, datasets) {
     datasets.forEach(d => {
       const raw = d.vals[idx];
       let display = '—';
-      if (raw > 0 || (d.key === 'growth' && raw !== 0) || d.key === 'ai') { 
+      if (raw !== null && raw !== undefined) { 
         if (d.key === 'interest') display = p.interest; 
         else if (d.key === 'ai') display = p.aiImpact; 
         else if (d.key === 'salary') display = '$' + raw.toLocaleString();
