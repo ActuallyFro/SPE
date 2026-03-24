@@ -482,7 +482,7 @@
         </button>
 
         <!-- Filter Menu Popup -->
-        <div class="filter-menu" id="filter-menu">
+        <div class="filter-menu" id="filter-menu" onclick="event.stopPropagation()">
           <div class="filter-group-title">Filter by Interest</div>
           <label class="chk-row">
             <input type="checkbox" checked onchange="updateFilter('High')" id="chk-High"> High
